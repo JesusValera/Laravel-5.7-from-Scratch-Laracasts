@@ -8,7 +8,7 @@
 
             <div class="control">
                 <input type="text" class="input {{ $errors->has('title') ? 'is-danger' : '' }}" name="title" id="title"
-                       placeholder="Title" value="{{ old('title') }}">
+                       placeholder="Title" value="{{ old('title') }}" required>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
 
             <div class="control">
                 <input type="text" class="input {{ $errors->has('description') ? 'is-danger' : '' }}" name="description"
-                       id="description" placeholder="Description" value="{{ old('description') }}">
+                       id="description" placeholder="Description" value="{{ old('description') }}" required>
             </div>
         </div>
 
@@ -28,13 +28,5 @@
         </div>
     </form>
 
-    @if($errors->any())
-        <div class="notification is-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('errors')
 @endsection
