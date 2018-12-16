@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ProjectCreated;
 use App\Project;
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+//        ->only(['store', 'update'])
+//        ->except(['store', 'update'])
+    }
+
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::where('owner_id', auth()->id())->get();
 
         return view('projects.index', compact('projects'));
     }
@@ -21,6 +29,15 @@ class ProjectsController extends Controller
 
     public function show(Project $project)
     {
+        //abort_if($project->id !== auth()->id(), 403);
+        //abort_unless(auth()->user()->owns($project), 403);
+        $this->authorize('update', $project);
+//        if (\Gate::denies('update', $project)) {
+//            abort(403);
+//        }
+//        abort_unless(\Gate::allows('update', $project), 403);
+
+
         return view('projects.show', [
             'project' => $project,
         ]);
@@ -30,10 +47,15 @@ class ProjectsController extends Controller
     {
         $validated = request()->validate([
             'title' => 'required|min:3',
-            'description' => 'required',
+            'description' => 'required|min:3',
         ]);
+        $validated['owner_id'] = auth()->id();
 
-        Project::create($validated);
+        $project = Project::create($validated);
+
+        \Mail::to('TO-jesus.valera@smileandlearn.com')->send(
+            new ProjectCreated($project)
+        );
 
         return redirect('/projects');
     }

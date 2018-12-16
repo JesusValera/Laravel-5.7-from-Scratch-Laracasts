@@ -1,14 +1,13 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('content')
 
-    <h1>{{ $project->title }}</h1>
+    <span class="title">{{ $project->title }}</span> <a href="/projects/{{ $project->id }}/edit">Edit</a>
+    <br><br>
 
     <div class="content">
         {{ $project->description }}
     </div>
-
-    <a href="/projects/{{ $project->id }}/edit">Edit</a>
 
     @if($project->tasks->count())
         <div class="box">

@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('/', 'PagesController@home');
+//Route::get('/', 'PagesController@home');
+Route::get('/', 'ProjectsController@index');
 Route::get('/about', 'PagesController@about');
 Route::get('/contact', 'PagesController@contact');
 
@@ -25,10 +26,10 @@ Route::patch('projects/{project}', 'ProjectsController@upate');
 Route::delete('projects/{project}', 'ProjectsController@destroy');
 */
 
-Route::resource('projects', 'ProjectsController');
-
+Route::resource('projects', 'ProjectsController')/*->middleware('can:update,project')*/;
 
 Route::patch('tasks/{task}', 'ProjectTasksController@update');
 
 Route::post('projects/{project}/tasks', 'ProjectTasksController@store');
 
+Auth::routes();
