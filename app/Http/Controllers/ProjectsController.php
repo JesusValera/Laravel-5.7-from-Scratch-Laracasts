@@ -28,10 +28,8 @@ class ProjectsController extends Controller
 
     public function index(Twitter $twitter)
     {
-        $projects = Project::where('owner_id', $this->auth->id())->get();
-
         return view('projects.index', [
-            'projects' => $projects,
+            'projects' => $this->auth->user()->projects,
             'twitter' => $twitter,
         ]);
     }
@@ -58,10 +56,7 @@ class ProjectsController extends Controller
 
     public function store()
     {
-        $validated = $this->validate($this->request, [
-            'title' => 'required|min:3',
-            'description' => 'required|min:3',
-        ]);
+        $validated = $this->validateProject();
         $validated['owner_id'] = $this->auth->id();
 
         $project = Project::create($validated);
@@ -80,12 +75,7 @@ class ProjectsController extends Controller
 
     public function update(Project $project)
     {
-        $validated = $this->validate($this->request, [
-            'title' => 'required|min:3',
-            'description' => 'required',
-        ]);
-
-        $project->update($validated);
+        $project->update($this->validateProject());
 
         return redirect('/projects');
     }
@@ -97,4 +87,11 @@ class ProjectsController extends Controller
         return redirect('/projects');
     }
 
+    private function validateProject()
+    {
+        return $validated = $this->validate($this->request, [
+            'title' => 'required|min:3',
+            'description' => 'required|min:3',
+        ]);
+    }
 }
