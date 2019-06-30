@@ -59,9 +59,10 @@ class ProjectsController extends Controller
         $validated = $this->validateProject();
         $validated['owner_id'] = $this->auth->id();
 
+        /** @var Project $project */
         $project = Project::create($validated);
 
-        \Mail::to('example@mail.com')->send(
+        \Mail::to($project->user->email)->send(
             new ProjectCreated($project)
         );
 

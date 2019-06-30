@@ -30,8 +30,9 @@ class ProjectCreated extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
-        return $this->markdown('mail.project-created');
+        return $this->markdown('mail.project-created')
+            ->subject('Emails title');
     }
 }

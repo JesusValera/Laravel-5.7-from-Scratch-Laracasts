@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
@@ -32,4 +33,8 @@ class Project extends Model
         $this->tasks()->create($task);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 }
