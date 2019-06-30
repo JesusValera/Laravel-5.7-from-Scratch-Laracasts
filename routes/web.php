@@ -34,3 +34,7 @@ Route::post('/completed-tasks/{task}', 'CompletedTasksController@store');
 Route::delete('/completed-tasks/{task}', 'CompletedTasksController@destroy');
 
 Auth::routes();
+
+Route::get('/serviceProvider', function (\App\Repositories\UserRepository $userRepository) {
+    dd($userRepository);
+});

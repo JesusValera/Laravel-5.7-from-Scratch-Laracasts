@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ProjectCreated;
 use App\Project;
+use App\Services\Twitter;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard as Auth;
 
@@ -25,11 +26,14 @@ class ProjectsController extends Controller
 //        ->except(['store', 'update'])
     }
 
-    public function index()
+    public function index(Twitter $twitter)
     {
         $projects = Project::where('owner_id', $this->auth->id())->get();
 
-        return view('projects.index', compact('projects'));
+        return view('projects.index', [
+            'projects' => $projects,
+            'twitter' => $twitter,
+        ]);
     }
 
     public function create()
