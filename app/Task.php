@@ -22,20 +22,12 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
-    /**
-     * @param bool $completed
-     *
-     * @return bool
-     */
-    public function complete(bool $completed = true): bool
+    public function complete(bool $completed = true): void
     {
         $this->update(compact('completed'));
     }
 
-    /**
-     * @return bool
-     */
-    public function incomplete(): bool
+    public function incomplete(): void
     {
         $this->complete(false);
     }
