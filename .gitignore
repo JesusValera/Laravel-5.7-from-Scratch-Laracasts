@@ -7,6 +7,8 @@
 /.vscode
 /nbproject
 /.vagrant
+_ide_helper.php
+composer.lock
 Homestead.json
 Homestead.yaml
 npm-debug.log

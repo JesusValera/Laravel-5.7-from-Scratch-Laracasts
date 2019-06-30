@@ -5,11 +5,21 @@ namespace App\Http\Controllers;
 use App\Mail\ProjectCreated;
 use App\Project;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\Guard as Auth;
 
 class ProjectsController extends Controller
 {
-    public function __construct()
+    /** @var Request */
+    private $request;
+
+    /** @var Auth */
+    private $auth;
+
+    public function __construct(Request $request, Auth $auth)
     {
+        $this->request = $request;
+        $this->auth = $auth;
+
         $this->middleware('auth');
 //        ->only(['store', 'update'])
 //        ->except(['store', 'update'])
@@ -17,7 +27,7 @@ class ProjectsController extends Controller
 
     public function index()
     {
-        $projects = Project::where('owner_id', auth()->id())->get();
+        $projects = Project::where('owner_id', $this->auth->id())->get();
 
         return view('projects.index', compact('projects'));
     }
@@ -29,14 +39,13 @@ class ProjectsController extends Controller
 
     public function show(Project $project)
     {
-        //abort_if($project->id !== auth()->id(), 403);
-        //abort_unless(auth()->user()->owns($project), 403);
-        $this->authorize('update', $project);
+//        abort_if($project->id !== auth()->id(), 403);
+//        abort_unless(auth()->user()->owns($project), 403);
 //        if (\Gate::denies('update', $project)) {
 //            abort(403);
 //        }
 //        abort_unless(\Gate::allows('update', $project), 403);
-
+        $this->authorize('update', $project);
 
         return view('projects.show', [
             'project' => $project,
@@ -45,15 +54,15 @@ class ProjectsController extends Controller
 
     public function store()
     {
-        $validated = request()->validate([
+        $validated = $this->validate($this->request, [
             'title' => 'required|min:3',
             'description' => 'required|min:3',
         ]);
-        $validated['owner_id'] = auth()->id();
+        $validated['owner_id'] = $this->auth->id();
 
         $project = Project::create($validated);
 
-        \Mail::to('TO-jesus.valera@smileandlearn.com')->send(
+        \Mail::to('example@mail.com')->send(
             new ProjectCreated($project)
         );
 
@@ -67,7 +76,7 @@ class ProjectsController extends Controller
 
     public function update(Project $project)
     {
-        $validated = request()->validate([
+        $validated = $this->validate($this->request, [
             'title' => 'required|min:3',
             'description' => 'required',
         ]);

@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 
 class ProjectTasksController extends Controller
 {
+    /** @var Request */
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     public function store(Project $project)
     {
-        $attributes = request()->validate(['description' => 'required']);
+        $attributes = $this->validate($this->request, ['description' => 'required']);
         $project->addTask($attributes);
 
         return back();
@@ -19,12 +26,16 @@ class ProjectTasksController extends Controller
 
     public function update(Task $task)
     {
-        if (request()->has('completed')) {
-            $task->complete();
-        } else {
-            $task->incomplete();
-        }
+//        $method = $this->request->has('completed') ? 'complete' : 'incomplete';
+//        $task->$method();
 
+        if ($this->request->has('completed')) {
+            $task->complete();
+        } elseif ($this->request->has('incompleted')) {
+            $task->incomplete();
+        } else {
+            abort(404);
+        }
 
         return back();
     }

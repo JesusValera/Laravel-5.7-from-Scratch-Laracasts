@@ -14,8 +14,8 @@
             <label class="label" for="title">Title</label>
 
             <div class="control">
-                <input type="text" class="input" name="title" id="title" placeholder="Title"
-                       value="{{ $project->title }}">
+                <input type="text" class="input" name="title" id="title"
+                       placeholder="Title" value="{{ $project->title }}">
             </div>
 
         </div>
@@ -24,8 +24,8 @@
             <label class="label" for="description">Description</label>
 
             <div class="control">
-                <input type="text" class="input" name="description" id="description" placeholder="Description"
-                       value="{{ $project->description }}">
+                <input type="text" class="input" name="description" id="description"
+                       placeholder="Description" value="{{ $project->description }}">
             </div>
 
         </div>
