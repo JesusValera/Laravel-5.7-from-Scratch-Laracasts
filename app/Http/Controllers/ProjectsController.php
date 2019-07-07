@@ -62,9 +62,7 @@ class ProjectsController extends Controller
         /** @var Project $project */
         $project = Project::create($validated);
 
-        \Mail::to($project->user->email)->send(
-            new ProjectCreated($project)
-        );
+        event(new \App\Events\ProjectCreated($project));
 
         return redirect('/projects');
     }
